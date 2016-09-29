@@ -19,6 +19,8 @@
 
 /**删除按钮 */
 @property (weak, nonatomic) IBOutlet UIButton *removeBtn;
+/**提示框 */
+@property (weak, nonatomic) IBOutlet UILabel *labelHUB;
 
 @property (nonatomic,strong) NSArray *dataArr;
 
@@ -63,7 +65,10 @@
     CGFloat shopX = (index % allCols) *(width + spacingX);
     CGFloat shopY = (index / allCols) * (height +spacingY);
     
-    sender.enabled = (index !=5);
+    if (index == 5) {
+        sender.enabled = NO;
+        [self showHUBInfo:@"购物车已满，不要买买买～"];
+    }
     self.removeBtn.enabled = YES;
     // 获取数据和自定义视图
     HGZShopView *shopImage = [HGZShopView shopViewWithShop:self.dataArr[index]];
@@ -75,7 +80,16 @@
     NSInteger index = self.shopView.subviews.count;
     if (index == 0) {
         self.removeBtn.enabled = NO;
+        [self showHUBInfo:@"购物车已空，赶紧买买买～"];
     }
     self.addBtn.enabled = YES;
+}
+- (void)showHUBInfo:(NSString *)info{
+    [UIView animateWithDuration:2.0 delay:1.0 options:UIViewAnimationOptionCurveLinear animations:^{
+        self.labelHUB.text = info;
+        self.labelHUB.alpha = 1.0f;
+    } completion:^(BOOL finished) {
+        self.labelHUB.alpha = 0.f;
+    }];
 }
 @end
